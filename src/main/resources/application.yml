@@ -9,7 +9,8 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: true 
+          enabled: true
+          lower-case-service-id: true
 
 
 
