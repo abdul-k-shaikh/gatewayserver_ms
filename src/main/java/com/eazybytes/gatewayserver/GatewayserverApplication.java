@@ -20,7 +20,9 @@ public class GatewayserverApplication {
 		return routeLocatorBuilder.routes()
 				.route(p -> p.path("/eazybank/accounts/**")
 						.filters(f -> f.rewritePath("/eazybank/accounts/(?<segment>.*)", "/${segment}")
-								.addResponseHeader("X-response-Time", LocalDateTime.now().toString())) //adding filter
+								.addResponseHeader("X-response-Time", LocalDateTime.now().toString()) //adding filter
+						.circuitBreaker(config->config.setName("accountsCircuitBreaker") //CiscuitBreaker name
+						.setFallbackUri("forward:/contact-support")))
 						.uri("lb://ACCOUNTS"))
 				.route(p -> p.path("/eazybank/accounts/**")
 						.filters(f -> f.rewritePath("/eazybank/accounts/(?<segment>.*)", "/${segment}")
