@@ -11,6 +11,9 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      httpclient:
+        connect-timeout: 1000
+        response-timeout: 5s
 
 
 
@@ -57,5 +60,18 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 2
         failure-rate-threshold: 50
         wait-duration-in-open-state: 10000
+
+#retry pattern config
+resilience4j.retry: 
+  configs: 
+   default: 
+     maxAttempts: 3
+     waitDuration: 100
+     enable-exponential-backoff: true
+     exponential-backoff-multiplier: 2
+     ignore-exceptions:
+        - java.lang.NullPointerException
+      
+      
 
 build.version: 3.0
