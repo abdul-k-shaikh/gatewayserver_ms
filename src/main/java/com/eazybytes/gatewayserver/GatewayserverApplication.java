@@ -10,6 +10,7 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 
+import io.netty.handler.codec.http.HttpMethod;
 import reactor.core.publisher.Mono;
 
 @SpringBootApplication
@@ -28,9 +29,10 @@ public class GatewayserverApplication {
 								.circuitBreaker(config -> config.setName("accountsCircuitBreaker") // CiscuitBreaker name
 										.setFallbackUri("forward:/contactSupport")))
 						.uri("lb://ACCOUNTS"))
-				.route(p -> p.path("/eazybank/accounts/**")
+				.route(p -> p.path("/eazybank/loans/**")
 						.filters(f -> f.rewritePath("/eazybank/accounts/(?<segment>.*)", "/${segment}")
-								.addResponseHeader("X-response-Time", LocalDateTime.now().toString())) // adding filter
+								.addResponseHeader("X-response-Time", LocalDateTime.now().toString()) // adding filter
+						.retry(retryConfig->retryConfig.setRetries(3)))	
 						.uri("lb://LOANS"))
 				.route(p -> p.path("/eazybank/accounts/**")
 						.filters(f -> f.rewritePath("/eazybank/accounts/(?<segment>.*)", "/${segment}")

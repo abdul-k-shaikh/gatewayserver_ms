@@ -11,9 +11,10 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+#Http timeout configurations
       httpclient:
         connect-timeout: 1000
-        response-timeout: 5s
+        response-timeout: 2s
 #rate limiter config
   data: 
     redis:
